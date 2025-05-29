@@ -1,12 +1,14 @@
-import { response } from "express";
 import fastify from "fastify";
-
+import cors from '@fastify/cors'
 const server = fastify();
-
+server.register(cors,{
+  origin:"*",
+  methods:"GET"
+})
 //dados
 const jogos = [
   {
-    "console": "Super Nintendo (SNES)",
+    "console": "snes",
     "jogos": [
       {
         "id": 1,
@@ -23,7 +25,7 @@ const jogos = [
     ]
   },
   {
-    "console": "Mega Drive (Genesis)",
+    "console": "mega drive",
     "jogos": [
       {
         "id": 3,
@@ -40,7 +42,7 @@ const jogos = [
     ]
   },
   {
-    "console": "PlayStation 1 (PS1)",
+    "console": "ps1",
     "jogos": [
       {
         "id": 5,
@@ -137,6 +139,31 @@ server.get("/jogos", async(request,response)=>{
 
   return {jogos}
 })
+interface JogosParams{
+  console:string
+}
+server.get<{Params:JogosParams}>("/jogos/console/:console", async(request,response)=>{
+ const { console } = request.params;
+
+
+const game = jogos.find(g => g.console == console)
+
+if(!game){
+    response.type('application/json').code(404);
+
+    return{
+      message:"Game Not Found"
+    
+    }
+}else{
+  response.type('application/json').code(200);
+
+  return {game}
+}
+
+})
+
+
 server.get("/criadores", async(request,response)=>{
   response.type('application/json').code(200);
 
@@ -144,11 +171,16 @@ server.get("/criadores", async(request,response)=>{
 })
 
 interface CriadoresParams {
-  id:string
+  jogo:string
 }
-server.get<{Params:CriadoresParams}>("/criadores/:id",async(request,response)=>{
-  const id = parseInt(request.params.id)
-  const criador = criadores.find(c => c.id === id )
+
+server.get<{Params:CriadoresParams}>("/criadores/:jogo",async(request,response)=>{
+  const  { jogo } = request.params;
+  
+  const criador  = criadores.find(c => c.jogo === jogo )
+
+
+
 if(!criador){
     response.type("application/json").code(404);
     return{

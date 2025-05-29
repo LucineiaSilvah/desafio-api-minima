@@ -1,81 +1,156 @@
-<div align="center">
 
-  <img src="./.github/assets/blue-saiyan-bg.png" alt="Logo" height="200">
-  <h1 align="center"><strong>NODE BOILERPLATE - BLUE EDITION</strong></h1>
-  <p align="center">
-	  Don't start a new Node project from zero!<br> Use this simple <b>Nodejs</b> boilerplate with pre-configured <b>Typescript</b> in a modern way.
-  </p>
+# 🎮 API de Jogos Retrô
 
-</div>
+Uma API simples feita com **Fastify** que fornece informações sobre jogos clássicos e seus criadores.
 
-<br />
+## 🚀 Como usar
 
-  <!-- Badges -->
-<div align="center">
-  
-  [![TypeScript version][ts-badge]][typescript-5-4]
-  [![Node.js version][nodejs-badge]][nodejs]
+### 📦 Instalação
 
-</div>
+1. Clone este repositório:
+```bash
+git clone git@github.com:LucineiaSilvah/desafio-api-minima.git
+```
 
-# 🚀 Technologies
-
-This code source was developed with the following items:
-
-### 📦 Dependencies
-
-- [typescript][typescript-npm] - Superset for application scale JavaScript development
-- [tsx][tsx-npm] - TypeScript Execute (tsx): Enable Node.js to run TypeScript
-- [tsup][tsup-npm] - Bundle your TypeScript library with no config, powered by esbuild
-- [@types/node][@types/node-npm] - type definitions for node
-
-### 📄 Files
-
-- `.gitignore` - Ignore folders like node_modules
-- `.env` - Enviroment variables
-- `tsconfig.json` - Typescript configure Options
+2. Instale as dependências:
+```bash
+npm install
+```
 
 ### ⚡ Scripts
 
-- `npm run dist`: Compiles TypeScript files to JavaScript in the dist directory.
-- `npm run start:dev`: Runs the server in development mode with environment variables loaded from the .env file.
-- `npm run start:watch`: Runs the server in development mode with support for automatic reload on file changes.
-- `npm run start:dist`: Compiles the project and runs the compiled version from the dist directory.
+- `npm run dist`: Compila os arquivos TypeScript para JavaScript no diretório `dist`.
+- `npm run start:dev`: Executa o servidor em modo de desenvolvimento com variáveis de ambiente carregadas do arquivo `.env`.
+- `npm run start:watch`: Executa o servidor em modo de desenvolvimento com suporte a recarregamento automático ao alterar os arquivos.
+- `npm run start:dist`: Compila o projeto e executa a versão compilada a partir do diretório `dist`.
 
-# 👨‍💻 How To Use
+---
 
-click in **[Use this template]** OR
+## 📚 Endpoints
 
-To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js v20+](https://nodejs.org/en/) + [NPM v10+](https://nodejs.org/en/) installed on your computer. From your command line:
+### 🔹 Listar todos os jogos
+**GET** `/jogos`
 
-```bash
-# Clone this repository
-$ git clone https://github.com/felipeAguiarCode/node-blue-boilerplate
-
-# Go into the repository
-$ cd node-blue-boilerplate
-
-# Install dependencies
-$ npm install
+**Resposta:**
+```json
+{
+  "jogos": [
+    {
+      "console": "snes",
+      "jogos": [
+        {
+          "id": 1,
+          "nome": "The Legend of Zelda: A Link to the Past",
+          "descricao": "Um jogo de aventura...",
+          "categoria": ["Ação", "Aventura"]
+        }
+      ]
+    }
+  ]
+}
 ```
 
-## Author
+---
 
-| [<img src="https://avatars3.githubusercontent.com/u/37452836?s=96&v=4"><br><sub>Felipe Aguiar</sub>](https://github.com/felipeAguiarCode) |
-| :---------------------------------------------------------------------------------------------------------------------------------------: |
-|                                            [Linkedin](www.linkedin.com/in/felipe-aguiar-exe/)                                             |
+### 🔹 Listar jogos por console
+**GET** `/jogos/console/:console`
 
-# Credits
+**Exemplo:** `/jogos/console/snes`
 
-icons by [Pino Lamanna][dribble-icon]
+**Resposta (sucesso):**
+```json
+{
+  "game": {
+    "console": "snes",
+    "jogos": [
+      {
+        "id": 1,
+        "nome": "The Legend of Zelda: A Link to the Past",
+        "descricao": "Um jogo de aventura...",
+        "categoria": ["Ação", "Aventura"]
+      }
+    ]
+  }
+}
+```
 
-[typescript]: https://www.typescriptlang.org/
-[typescript-5-4]: https://www.typescriptlang.org/
-[ts-badge]: https://img.shields.io/badge/TypeScript-5.4-blue.svg
-[nodejs-badge]: https://img.shields.io/badge/Node.js->=%2020.00-blue.svg
-[nodejs]: https://nodejs.org/
-[dribble-icon]: https://dribbble.com/Schakalwal
-[typescript-npm]: https://www.npmjs.com/package/typescript
-[tsx-npm]: https://www.npmjs.com/package/tsx
-[tsup-npm]: https://www.npmjs.com/package/tsup
-[@types/node-npm]: https://www.npmjs.com/package/@types/node
+**Resposta (erro):**
+```json
+{
+  "message": "Game Not Found"
+}
+```
+
+---
+
+### 🔹 Listar todos os criadores
+**GET** `/criadores`
+
+**Resposta:**
+```json
+{
+  "criadores": [
+    {
+      "id": 1,
+      "jogo": "The Legend of Zelda: A Link to the Past",
+      "criador": {
+        "nome": "Shigeru Miyamoto",
+        "descricao": "Designer de jogos lendário...",
+        "nascimento": "1952-11-16",
+        "morte": null,
+        "inspiracao": "Exploração na infância..."
+      }
+    }
+  ]
+}
+```
+
+---
+
+### 🔹 Buscar criador por nome do jogo
+**GET** `/criadores/:jogo`
+
+**Exemplo:** `/criadores/Resident Evil`
+
+**Resposta (sucesso):**
+```json
+{
+  "criador": {
+    "id": 5,
+    "jogo": "Resident Evil",
+    "criador": {
+      "nome": "Shinji Mikami",
+      "descricao": "Diretor e designer japonês...",
+      "nascimento": "1965-08-11",
+      "morte": null,
+      "inspiracao": "Baseado no jogo Alone in the Dark..."
+    }
+  }
+}
+```
+
+**Resposta (erro):**
+```json
+{
+  "message": "Driver nor found"
+}
+```
+
+---
+
+## 🔐 CORS
+
+A API está com CORS habilitado para todos os domínios (`origin: *`) e permite apenas o método `GET`.
+
+---
+
+## 🛠️ Tecnologias
+
+- [Fastify](https://www.fastify.io/)
+- [Node.js](https://nodejs.org/)
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
